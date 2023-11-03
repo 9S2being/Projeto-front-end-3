@@ -11,7 +11,7 @@ let response;
 let currentPage = 1;
 let isLoading = false;
 let currentCharacterList = [];
-let charPerPage = 6;
+let charPerPage = 10;
 
 ///Função que tras a ultima localização 
 async function getLocationInfo(locationUrl) {
@@ -43,12 +43,14 @@ async function getLatestEpisode(episodeUrls) {
 }
 
 /// funçlão que mostra os personagens na tela
-async function loadCharacter(page = 1, name = '', charPerPage = 6) {
+async function loadCharacter(page = 1, name = '') {
     try {
         isLoading = true;
         const params = {
             name: name,
-            page: page
+            page: page,
+            perPage: charPerPage
+
         };
 
         response = await api.get('/character', { params });
@@ -64,27 +66,58 @@ async function loadCharacter(page = 1, name = '', charPerPage = 6) {
             const characterCard = document.createElement('div');
             characterCard.className = 'character-card';
 
+            let statusText = '';
+
+            if (character.status === 'Alive') {
+                statusText = 'Vivo';
+            } else if (character.status === 'Dead') {
+                statusText = 'Morto';
+            } else {
+                statusText = 'Desconhecido';
+            }
+
+            let statusClass = '';
+
+            if (character.status === 'Alive') {
+                statusClass = 'status-alive';
+            } else if (character.status === 'Dead') {
+                statusClass = 'status-dead';
+            } else {
+                statusClass = 'status-unknown';
+            }
+
+            let statusSpecies = '';
+
+            if (character.species === 'Alive') {
+                statusText = 'Vivo';
+            } else if (character.status === 'Dead') {
+                statusText = 'Morto';
+            } else {
+                statusText = 'Desconhecido';
+            }
+
             characterCard.innerHTML = `
-                <div class="text-start d-flex mt-2">
-                    <div class="row border rounded-2" id="bg-card-out">
-                        <div class="col-md-4">
-                            <img src="${character.image}" class="card-img-left" alt="image-cards" style="width: 150px; height: 178px; margin-right: 15px">
-                        </div>
-                        <div class="col-md-8 p-0">
-                            <div class="card-body" style="height: 178px; width: 310px;" id="bg-card-in">
-                                <h3 class="card-text fs-5 text-light" style="white-space: nowrap;">${character.name}</h3>
-                                <p class="card-text text-light" style=" font-size: 12px;">${character.status} - ${character.species}</p>
-                                <span class="card-text text-black">Última localização: <br></span>
-                                <span class="card-text text-light"">${await getLocationInfo(character.location.url)}</span> <br>
-                                <span class="card-text text-black";">Visto pela última vez: <br></span>
-                                <span class="card-text text-light">${await getLatestEpisode(character.episode)}</span>
-                            </div>
+            
+                <div class="row rounded-3 mt-3" id="bg-card-out">
+                    <div class="col-4">
+                        <img src="${character.image}" class="card-img-left" alt="image-cards" style="width: 150px; height: 187px; margin-left: -13px;">
+                    </div>
+                    <div class="col-4">
+                        <div class="card-body" style="height: 178px; width: 250px;" id="bg-card-in">
+                            <h3 class="card-text fs-5 text-light mt-2" style="white-space: nowrap; margin-left: 7px">${character.name}</h3>
+                            <p class="card-text text-light fw-semibold" style=" font-size: 12px; margin-left: 7px"><span class="${statusClass}"></span>${statusText} - ${character.species}</p>
+                            <span class="card-text text-secondary fw-semibold" style="margin-left: 5px">Última localização conhecida <br></span>
+                            <span class="card-text text-light fw-semibold" style="margin-left: 5px">${await getLocationInfo(character.location.url)}</span> <br>
+                            <span class="card-text text-secondary fw-semibold" style="margin-left: 5px;;">Visto pela última vez em: <br></span>
+                            <span class="card-text text-light fw-semibold" style="margin-left: 5px; margin-bottom: 20px;">${await getLatestEpisode(character.episode)}</span>
                         </div>
                     </div>
-                </div>`;
+                </div>
+            `;
 
             characterContainer.appendChild(characterCard);
         });
+
 
         prevPageBtn.disabled = !response.data.info.prev;
         nextPageBtn.disabled = currentPage === response.data.info.pages;
@@ -152,5 +185,5 @@ function showContagens() {
         });
 }
 
-loadCharacter();
+loadCharacter(currentPage, charPerPage.count);
 showContagens(currentPage)
