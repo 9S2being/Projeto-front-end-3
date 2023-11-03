@@ -6,12 +6,26 @@ const numChar = document.getElementById('num-char');
 const numLoc = document.getElementById('num-loc');
 const numEp = document.getElementById('num-ep');
 const title = document.getElementById('titulo');
+const icon = document.getElementById('action-icon');
 
 let response;
 let currentPage = 1;
 let isLoading = false;
 let currentCharacterList = [];
 let charPerPage = 10;
+
+
+
+let isRotating = false;
+
+icon.addEventListener('click', () => {
+  if (isRotating) {
+    icon.classList.remove('rotating');
+  } else {
+    icon.classList.add('rotating');
+  }
+  isRotating = !isRotating;
+});
 
 ///Função que tras a ultima localização 
 async function getLocationInfo(locationUrl) {
@@ -100,10 +114,10 @@ async function loadCharacter(page = 1, name = '') {
             
                 <div class="row rounded-3 mt-3" id="bg-card-out">
                     <div class="col-4">
-                        <img src="${character.image}" class="card-img-left" alt="image-cards" style="width: 150px; height: 187px; margin-left: -13px;">
+                        <img src="${character.image}" class="card-img-left character-image" alt="image-cards" style="width: 150px; height: 187px; margin-left: -13px;">
                     </div>
                     <div class="col-4">
-                        <div class="card-body" style="height: 178px; width: 250px;" id="bg-card-in">
+                        <div class="card-body character-info" style="height: 178px; width: 250px;" id="bg-card-in">
                             <h3 class="card-text fs-5 text-light mt-2" style="white-space: nowrap; margin-left: 7px">${character.name}</h3>
                             <p class="card-text text-light fw-semibold" style=" font-size: 12px; margin-left: 7px"><span class="${statusClass}"></span>${statusText} - ${character.species}</p>
                             <span class="card-text text-secondary fw-semibold" style="margin-left: 5px">Última localização conhecida <br></span>
