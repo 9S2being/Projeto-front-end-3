@@ -13,17 +13,25 @@
       color: #165416 !important;
       font-weight: 900;
       font-size: 4rem;
+      opacity: 0;
+      animation: sumir 2s ease-in forwards;
     }
+
+    #search {
+      opacity: 0;
+      transform: translateY(-100%);
+      animation: barraParaBaixo 2s ease-in forwards 1s;
+  }
 
     #rodape {
       background-color: rgb(24, 29, 24);
-      color: #959292; 
+      color: #959292;
       overflow: hidden;
     }
 
     #info {
       font-size: small;
-      
+
     }
 
     #dev {
@@ -38,15 +46,15 @@
       background-repeat: no-repeat;
       height: 2000px;
       overflow: hidden;
-    }
+   }
 
     #pagination {
       display: flex;
       margin-left: 550px;
       gap: 70px;
       overflow: hidden;
+      animation: movePagination 1s forwards;
     }
-
 
     /* Cards de personagem */
 
@@ -112,3 +120,64 @@
       margin-top: 6px;
       margin-right: 4px;
     }
+
+    .character-card {
+      opacity: 0;
+      animation: sumir 1s ease-in-out forwards;
+    }
+
+    .character-image {
+      opacity: 0;
+      animation: sumir 1s ease-in-out 0.5s forwards;
+    }
+
+    .character-info {
+      opacity: 0;
+      animation: sumir 1s ease-in-out 1s forwards;
+    }
+
+    /* Animações */
+
+       @keyframes sumir {
+      from {
+        opacity: 0;
+      }
+
+      to {
+        opacity: 1;
+      }
+    }
+
+
+    @keyframes barraParaBaixo {
+      from {
+          opacity: 0;
+          transform: translateY(-100%);
+      }
+      to {
+          opacity: 1;
+          transform: translateY(0);
+      }
+  }
+  
+  .rotating {
+    animation: action-Icon 2s linear infinite;
+  }
+  
+  @keyframes action-Icon {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  
+  
+  
+  
+  
+  
+
+
+  
